@@ -30,13 +30,6 @@ public class TrackingHelper {
     TimeUtils.getCurrentTimestampString();
   }
 
-  public static void main(String[] args) throws Exception {
-    TrackingHelper t = new TrackingHelper("http://service-registry.local:8500/v1");
-    System.out.println(t.sampleExists("QABCD"));
-    
-    System.out.println(t.sampleExists("QABCD004AO"));
-  }
-
   public boolean sampleExists(String sampleID) throws ClientProtocolException, IOException, ServiceNotFoundException {
     if (serviceList.isEmpty()) {
       throw new ServiceNotFoundException();
