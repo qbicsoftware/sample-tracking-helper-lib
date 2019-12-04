@@ -1,63 +1,80 @@
 package life.qbic;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import life.qbic.services.ConsulServiceFactory;
 import life.qbic.services.Service;
-import life.qbic.services.ServiceType;
-import life.qbic.services.connectors.ConsulConnector;
-import life.qbic.utils.TimeUtils;
 
 public class TrackingHelper {
 
   private List<Service> serviceList;
 
-
   public TrackingHelper(String registryURL) throws Exception {
     serviceList = new ArrayList<>();
-    URL serviceRegistryUrl = new URL(registryURL);
-    try (ConsulConnector connector = new ConsulConnector(serviceRegistryUrl)) {
-      ConsulServiceFactory factory = new ConsulServiceFactory(connector);
-      serviceList.addAll(factory.getServicesOfType(ServiceType.SAMPLE_TRACKING));
-    }
-    TimeUtils.getCurrentTimestampString();
+    // URL serviceRegistryUrl = new URL(registryURL);
+    // try (ConsulConnector connector = new ConsulConnector(serviceRegistryUrl)) {
+    // ConsulServiceFactory factory = new ConsulServiceFactory(connector);
+    // serviceList.addAll(factory.getServicesOfType(ServiceType.SAMPLE_TRACKING));
+    // }
   }
 
-  public boolean sampleExists(String sampleID) throws ClientProtocolException, IOException, ServiceNotFoundException {
+  public static void main(String[] args) throws Exception {
+    TrackingHelper t = new TrackingHelper("");
+    t.sampleExists("QTRAK008AX");
+  }
+
+  public void sampleExists(String sampleID) throws Exception {
     if (serviceList.isEmpty()) {
       throw new ServiceNotFoundException();
     } else {
       Service s = serviceList.get(0);
       String baseURL = s.getRootUrl().toString();
-      
-      System.out.println(baseURL);
-
       HttpClient client = HttpClientBuilder.create().build();
+      String trackingURL = baseURL + "/samples/" + sampleID;
+      System.out.println("url: " + trackingURL);
+      HttpGet getSampleInfo = new HttpGet(trackingURL);
 
-      HttpGet getSampleInfo = new HttpGet(baseURL + "samples/" + sampleID);
       HttpResponse response = client.execute(getSampleInfo);
-      System.out.println(response.getStatusLine());
 
-      // ObjectMapper mapper = new ObjectMapper();
-      // Sample sample = mapper.readValue(response.getEntity().getContent(), Sample.class);
+      StatusLine status = response.getStatusLine();
+      if (status.getStatusCode() != 200) {
+        throw new Exception(status.getReasonPhrase());
+      }
     }
-    return false;
   }
 
-
-  public void tryUpdateSample(String sampleID) throws ServiceNotFoundException {
+  public void tryUpdateSample(String sampleID, String locationJson) throws Exception {
     if (serviceList.isEmpty()) {
       throw new ServiceNotFoundException();
     } else {
       Service s = serviceList.get(0);
-      s.getRootUrl();
+      String baseURL = s.getRootUrl().toString();
+
+//      Date date = new Date(System.currentTimeMillis());
+//
+//      loc.setArrivalDate(date);
+
+      HttpClient client = HttpClientBuilder.create().build();
+      HttpPost post = new HttpPost(baseURL + "samples/" + sampleID + "/currentLocation/");
+//      ObjectMapper mapper = new ObjectMapper();
+
+//      String json = mapper.writeValueAsString(loc);
+      HttpEntity entity = new StringEntity(locationJson, ContentType.APPLICATION_JSON);
+      post.setEntity(entity);
+      HttpResponse response = client.execute(post);
+
+      StatusLine status = response.getStatusLine();
+      if (status.getStatusCode() != 200) {
+        throw new Exception(status.getReasonPhrase());
+      }
     }
   }
 
