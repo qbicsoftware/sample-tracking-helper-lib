@@ -9,7 +9,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -39,24 +38,6 @@ public class TrackingHelper {
     try (ConsulConnector connector = new ConsulConnector(serviceRegistryUrl)) {
       ConsulServiceFactory factory = new ConsulServiceFactory(connector);
       serviceList.addAll(factory.getServicesOfType(ServiceType.SAMPLE_TRACKING));
-    }
-  }
-
-  public void sampleExists(String sampleID) throws Exception {
-    if (serviceList.isEmpty()) {
-      throw new ServiceNotFoundException();
-    } else {
-      Service s = serviceList.get(0);
-      String baseURL = s.getRootUrl().toString();
-      HttpClient client = HttpClientBuilder.create().build();
-      String trackingURL = baseURL + "/samples/" + sampleID;
-      logger.info("looking for sample using url: " + trackingURL);
-      HttpGet getSampleInfo = new HttpGet(trackingURL);
-      getSampleInfo.setHeader("Authorization", authHeader);
-
-      HttpResponse response = client.execute(getSampleInfo);
-
-      printResponse(response);
     }
   }
 
