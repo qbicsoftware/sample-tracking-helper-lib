@@ -17,8 +17,9 @@ The usage is pretty simple:
 ServiceCredentials serviceCredentials = new ServiceCredentials()
 serviceCredentials.user = "authuser"
 serviceCredentials.password = "authpw"
+URL serviceRegistryUrl = new URL("https://myservice-registry.de")
 
-sampleTracker = SampleTracker.createQBiCSampleTracker(serviceUrl, serviceCredentials, location)
+sampleTracker = SampleTracker.createQBiCSampleTracker(serviceRegistryUrl, serviceCredentials, location)
 ```
 
 where the location object is a String representation in JSON:
