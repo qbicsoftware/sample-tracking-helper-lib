@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SampleTracker {
 
-    static SampleTracking createQBiCSampleTracker(URL serviceRegistryUrl,
+    public static SampleTracking createQBiCSampleTracker(URL serviceRegistryUrl,
                                                   ServiceCredentials credentials,
                                                   String location) {
         List<Service> trackingService = SampleTrackingService.requestServices(serviceRegistryUrl);
