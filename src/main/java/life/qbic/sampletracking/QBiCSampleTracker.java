@@ -99,7 +99,7 @@ class QBiCSampleTracker implements SampleTracking {
       ObjectMapper mapper = new ObjectMapper();
       Sample sample;
       try {
-        sample = mapper.readValue(EntityUtils.toString(response.getEntity()), Sample.class);
+        sample = mapper.readValue(EntityUtils.toString(response.getEntity(), "UTF-8"), Sample.class);
       } catch (Exception e) {
         logger.error("Could not parse sample object for sample with id " + sampleId, e);
         throw new SampleUpdateException("The request for the current sample location failed.");
