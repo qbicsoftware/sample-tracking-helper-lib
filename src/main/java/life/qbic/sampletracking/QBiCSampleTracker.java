@@ -2,12 +2,16 @@ package life.qbic.sampletracking;
 
 import java.nio.charset.StandardCharsets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import life.qbic.datamodel.samples.Sample;
+import life.qbic.sampletracking.exceptions.SampleUpdateException;
 import life.qbic.sampletracking.exceptions.ServiceRequestException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -38,6 +42,7 @@ class QBiCSampleTracker implements SampleTracking {
 
   @Override
   public void updateSampleLocationToCurrentLocation(String sampleId) {
+
     String baseURL = trackingService.getRootUrl().toString();
 
     HttpClient client = HttpClientBuilder.create().build();
@@ -45,14 +50,14 @@ class QBiCSampleTracker implements SampleTracking {
 
     logger.info(String.format("Updating sample status using url for sampleId %s serviceUrl: %s", sampleId, trackingURL));
 
-    HttpPost post = new HttpPost(trackingURL);
-    post.setHeader("Authorization", authHeader);
+    HttpEntityEnclosingRequestBase request =  (isSampleAtQBiC(sampleId)) ? new HttpPut(trackingURL) : new HttpPost(trackingURL);
+    request.setHeader("Authorization", authHeader);
 
     HttpEntity entity = new StringEntity(locationJson, ContentType.APPLICATION_JSON);
-    post.setEntity(entity);
+    request.setEntity(entity);
     HttpResponse response;
     try {
-      response = client.execute(post);
+      response = client.execute(request);
     } catch (Exception e) {
       logger.error(e);
       throw new ServiceRequestException(e);
@@ -61,6 +66,44 @@ class QBiCSampleTracker implements SampleTracking {
     if (response.getStatusLine().getStatusCode() != 200 ){
       throw new ServiceRequestException(String.format("Http response code was %d", response.getStatusLine().getStatusCode()));
     }
+  }
 
+  private boolean isSampleAtQBiC(String sampleId) {
+      String baseURL = trackingService.getRootUrl().toString();
+
+      HttpClient client = HttpClientBuilder.create().build();
+      String trackingURL = baseURL + "/samples/" + sampleId;
+
+      logger.info(String.format("Querying sample tracking information for sample: %s.", sampleId));
+
+      HttpUriRequest request =  new HttpGet(trackingURL);
+      request.setHeader("Authorization", authHeader);
+      HttpResponse response;
+      try {
+        response = client.execute(request);
+      } catch (Exception e) {
+        logger.error("Query sample location failed.", e);
+        throw new ServiceRequestException("Could not query sample location information.");
+      }
+
+    if (response.getStatusLine().getStatusCode() != 200 ){
+      throw new ServiceRequestException(String.format("Http response code was %d", response.getStatusLine().getStatusCode()));
+    }
+
+      if (response.getEntity() == null) {
+        logger.info("No current location information available for sample " + sampleId);
+        return false;
+      }
+
+      ObjectMapper mapper = new ObjectMapper();
+      Sample sample;
+      try {
+        sample = mapper.readValue(response.getEntity().toString(), Sample.class);
+      } catch (Exception e) {
+        logger.error("Could not parse sample object for sample with id " + sampleId);
+        throw new SampleUpdateException("The request for the current sample location failed.");
+      }
+
+      return sample.getCurrentLocation().getName().equalsIgnoreCase("QBiC");
   }
 }
