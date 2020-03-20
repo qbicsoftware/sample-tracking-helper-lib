@@ -15,6 +15,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import life.qbic.services.Service;
@@ -98,9 +99,9 @@ class QBiCSampleTracker implements SampleTracking {
       ObjectMapper mapper = new ObjectMapper();
       Sample sample;
       try {
-        sample = mapper.readValue(response.getEntity().toString(), Sample.class);
+        sample = mapper.readValue(EntityUtils.toString(response.getEntity()), Sample.class);
       } catch (Exception e) {
-        logger.error("Could not parse sample object for sample with id " + sampleId);
+        logger.error("Could not parse sample object for sample with id " + sampleId, e);
         throw new SampleUpdateException("The request for the current sample location failed.");
       }
 
