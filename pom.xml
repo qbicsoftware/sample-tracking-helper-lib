@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>life.qbic</groupId>
 		<artifactId>parent-pom</artifactId>
-		<version>2.1.0</version>
+		<version>2.2.0</version>
 	</parent>
 	<artifactId>sample-tracking-helper-lib</artifactId>
-	<version>1.0.2</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>Sample Tracking Helper API</name>
 	<url>http://github.com/qbicsoftware/sample-tracking-helper-lib</url>
 	<description>An easy to use interface providing sample tracking update functions for ETL scripts</description>
@@ -54,12 +54,12 @@
 		<dependency>
 			<groupId>life.qbic</groupId>
 			<artifactId>core-utils-lib</artifactId>
-			<version>1.3.0</version>
+			<version>1.4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>life.qbic</groupId>
 			<artifactId>data-model-lib</artifactId>
-			<version>1.7.0</version>
+			<version>1.8.3</version>
 		</dependency>
 
 	</dependencies>
