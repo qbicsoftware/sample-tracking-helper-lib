@@ -9,7 +9,7 @@
 		<version>2.2.0</version>
 	</parent>
 	<artifactId>sample-tracking-helper-lib</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<name>Sample Tracking Helper API</name>
 	<url>http://github.com/qbicsoftware/sample-tracking-helper-lib</url>
 	<description>An easy to use interface providing sample tracking update functions for ETL scripts</description>
@@ -28,7 +28,7 @@
 			</snapshots>
 			<id>nexus-snapshots</id>
 			<name>QBiC Snapshots</name>
-			<url>https://qbic-repo.am10.uni-tuebingen.de/repository/maven-snapshots</url>
+			<url>https://qbic-repo.qbic.uni-tuebingen.de/repository/maven-snapshots</url>
 		</repository>
 		<repository>
 			<releases>
@@ -41,7 +41,7 @@
 			</snapshots>
 			<id>nexus-releases</id>
 			<name>QBiC Releases</name>
-			<url>https://qbic-repo.am10.uni-tuebingen.de/repository/maven-releases</url>
+			<url>https://qbic-repo.qbic.uni-tuebingen.de/repository/maven-releases</url>
 		</repository>
 	</repositories>
 
@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>life.qbic</groupId>
 			<artifactId>core-utils-lib</artifactId>
-			<version>1.4.3</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>life.qbic</groupId>
