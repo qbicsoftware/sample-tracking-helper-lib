@@ -57,7 +57,6 @@ class LocationIndependentSampleTracker implements LocationIndependentSampleTrack
     try {
       response = client.execute(request);
     } catch (Exception e) {
-      logger.error(e);
       throw new ServiceRequestException(e);
     }
 
