@@ -18,5 +18,12 @@ public class SampleTracker {
         return new QBiCSampleTracker(trackingService.get(0), credentials, location);
     }
 
-
+    public static LocationIndependentSampleTracking createLocationIndependentSampleTracker(URL serviceRegistryUrl,
+                                                         ServiceCredentials credentials, String statusChangeRequestJson) {
+        List<Service> trackingService = SampleTrackingService.requestServices(serviceRegistryUrl);
+        if (trackingService.isEmpty()) {
+            throw new ServiceNotFoundException();
+        }
+        return new LocationIndependentSampleTracker(trackingService.get(0), credentials, statusChangeRequestJson);
+    }
 }
