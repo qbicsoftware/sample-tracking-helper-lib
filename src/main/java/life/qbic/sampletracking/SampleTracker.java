@@ -19,11 +19,11 @@ public class SampleTracker {
     }
 
     public static LocationIndependentSampleTracking createLocationIndependentSampleTracker(URL serviceRegistryUrl,
-                                                         ServiceCredentials credentials, String statusChangeRequestJson) {
+                                                         ServiceCredentials credentials) {
         List<Service> trackingService = SampleTrackingService.requestServices(serviceRegistryUrl);
         if (trackingService.isEmpty()) {
             throw new ServiceNotFoundException();
         }
-        return new LocationIndependentSampleTracker(trackingService.get(0), credentials, statusChangeRequestJson);
+        return new LocationIndependentSampleTracker(trackingService.get(0), credentials);
     }
 }

@@ -7,9 +7,10 @@ package life.qbic.sampletracking;
 public interface LocationIndependentSampleTracking {
 
     /**
-     * This method changes the status of a specific sample with the provided code. Status and time point information is taken from the class
-     * implementing this functionality, or the script calling it.
+     * This method changes the status of a specific sample with the provided code. Status and time point information is taken from the
+     * provided json String
      * @param sampleCode the sample code of the sample being changed
+     * @param statusChangeRequestJson json containing the status name and timepoint of the change
      */
-    void updateSampleStatus(String sampleCode);
+    void updateSampleStatus(String sampleCode, String statusChangeRequestJson);
 }

@@ -23,11 +23,8 @@ class LocationIndependentSampleTracker implements LocationIndependentSampleTrack
 
   private String authHeader;
 
-  private String statusChangeRequestJson;
-
-  public LocationIndependentSampleTracker(Service trackingService, ServiceCredentials credentials, String statusChangeRequestJson) {
+  public LocationIndependentSampleTracker(Service trackingService, ServiceCredentials credentials) {
     this.trackingService = trackingService;
-    this.statusChangeRequestJson = statusChangeRequestJson;
     setAuthHeader(credentials);
   }
 
@@ -38,7 +35,7 @@ class LocationIndependentSampleTracker implements LocationIndependentSampleTrack
   }
 
   @Override
-  public void updateSampleStatus(String sampleCode) {
+  public void updateSampleStatus(String sampleCode, String statusChangeRequestJson) {
 
     String baseURL = trackingService.getRootUrl().toString();
 
