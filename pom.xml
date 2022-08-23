@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>life.qbic</groupId>
 	<artifactId>sample-tracking-helper-lib</artifactId>
-	<version>1.0.4</version>
+	<version>1.1.0</version>
 	<name>Sample Tracking Helper API</name>
 	<url>http://github.com/qbicsoftware/sample-tracking-helper-lib</url>
 	<description>An easy to use interface providing sample tracking update functions for ETL scripts</description>
