@@ -13,10 +13,10 @@ import java.util.List;
 class SampleTrackingService {
 
     static List<Service> requestServices(URL serviceRegistryUrl) {
-        List<Service> serviceList = new ArrayList<>();
+        List<Service> serviceList;
         try (ConsulConnector connector = new ConsulConnector(serviceRegistryUrl)) {
             ConsulServiceFactory factory = new ConsulServiceFactory(connector);
-            serviceList.addAll(factory.getServicesOfType(ServiceType.SAMPLE_TRACKING));
+            serviceList = new ArrayList<>(factory.getServicesOfType(ServiceType.SAMPLE_TRACKING));
         } catch (Exception e) {
             throw new ServiceRequestException(e);
         }

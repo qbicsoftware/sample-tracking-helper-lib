@@ -21,13 +21,13 @@ import life.qbic.services.Service;
 
 class QBiCSampleTracker implements SampleTracking {
 
-  private Logger logger = LogManager.getLogger(QBiCSampleTracker.class);
+  private final Logger logger = LogManager.getLogger(QBiCSampleTracker.class);
 
-  private Service trackingService;
+  private final Service trackingService;
 
   private String authHeader;
 
-  private String locationJson;
+  private final String locationJson;
 
   QBiCSampleTracker(Service trackingService, ServiceCredentials credentials, String locationJson) {
     this.trackingService = trackingService;
