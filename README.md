@@ -24,7 +24,7 @@ sampleTracker = SampleTracker.createQBiCSampleTracker(serviceRegistryUrl, servic
 
 where the location object is a String representation in JSON:
 
-```javascript
+```json
 {
 "location": {
         "name": "QBiC",
